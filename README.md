@@ -1,0 +1,2 @@
+# trex.game
+trex stranha
