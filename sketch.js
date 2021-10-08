@@ -43,19 +43,18 @@ function preload(){
 }
 
 function setup() {
-  createCanvas(600, 200);  
+  createCanvas(windowWidth, windowHeight);  
   
-  trex = createSprite(50,180,20,50);
+  trex = createSprite(50,height-100,20,50);
   trex.addAnimation("correno", trex_correndo);
   trex.addAnimation("collided" , trex_colidiu)
-  trex.scale = 0.5;
   
-  solo = createSprite(200,180,400,20);
+  solo = createSprite(width,height-100,width,20);
   solo.addImage("ground",imagemdosolo);
-  solo.x = solo.width /2;
+  solo.x = width/2;
   solo.velocityX = -4;
   
-  soloinvisivel = createSprite(200,190,400,10);
+  soloinvisivel = createSprite(200,height-90,400,10);
   soloinvisivel.visible = false;
   
   grupodebstaculos= createGroup();
@@ -65,19 +64,21 @@ function setup() {
   
   pontuacao = 0;
   
-  caboojogo=createSprite(300,100);
+  caboojogo=createSprite(width/2,height/2-60);
   caboojogo.addImage("cabo",cabonao);
-  caboojogo.scale=0.5;
   
-  restartaojogo=createSprite(300,130);
+  
+  restartaojogo=createSprite(width/2,height/2);
   restartaojogo.addImage("restarto",restartonao);
-  restartaojogo.scale=0.5;
+  
   
 }
 
 function draw() {
   background("white");
-  text("Pontuação: "+ pontuacao, 450,50);
+  textSize(50);
+  text("Pontuação: "+ pontuacao, width/2+500,height/2-350);
+  
     
   if (estadoJogo===ESTADONICIO){
     solo.velocityX=-(4+pontuacao/500);
@@ -88,16 +89,17 @@ function draw() {
       
     }
     
-    if(keyDown("space")&& trex.y >= 160) {
+    if(keyDown("space")|| touches.length>0 && trex.y >= 160) {
       trex.velocityY = -12;
       pulo.play();
+      touches=[];
     }
     
     
     
     trex.velocityY = trex.velocityY + 0.8;
     
-    if (solo.x < 0){
+    if (solo.x < width /6){
       solo.x = solo.width/2;
     }
     
@@ -112,8 +114,8 @@ function draw() {
     
     if (grupodebstaculos.isTouching(trex)){
       
-      //trex.velocityY=-10;
-      //pulo.play();
+      trex.velocityY=-10;
+      pulo.play();
       estadoJogo=ESTADOFIM;
       morte.play();
     } 
@@ -135,20 +137,23 @@ function draw() {
     caboojogo.visible=true;
     restartaojogo.visible=true;
     
-    if (mousePressedOver(restartaojogo)){
+    if (mousePressedOver(restartaojogo) || touches.length>0){
       reseta();
+      touches=[];
     }
   }
   
   trex.collide(soloinvisivel);
   
+  console.log(solo.x);
+
   drawSprites();
 }
 
 function gerarBstaculos(){
  if (frameCount % 60 === 0){
-   var bstaculo = createSprite(600,165,10,40);
-  bstaculo.velocityX = -(5+pontuacao/500);
+   var bstaculo = createSprite(width+5,height-110,10,40);
+  bstaculo.velocityX = -(20+pontuacao/500);
    
   
    
@@ -171,8 +176,8 @@ function gerarBstaculos(){
     }
    
     //atribuir escala e tempo de duração ao obstáculo         
-    bstaculo.scale = 0.5;
-    bstaculo.lifetime = 300;
+    
+    bstaculo.lifetime = 500;
     grupodebstaculos.add(bstaculo);
  }
 }
@@ -181,10 +186,10 @@ function gerarBstaculos(){
 function gerarNuvens() {
   //escreva o código aqui para gerar as nuvens 
   if (frameCount % 60 === 0) {
-    nuvem = createSprite(600,100,40,10);
-    nuvem.y = Math.round(random(10,60));
+    nuvem = createSprite(width+5,height-110,40,10);
+    nuvem.y = Math.round(random(100,600));
+    nuvem.scale=2;
     nuvem.addImage(imagemdanuvem);
-    nuvem.scale = 0.5;
     nuvem.velocityX = -(3+pontuacao/500);
     
      //atribuir tempo de duração à variável
