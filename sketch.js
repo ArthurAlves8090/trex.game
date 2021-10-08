@@ -49,7 +49,7 @@ function setup() {
   trex.addAnimation("correno", trex_correndo);
   trex.addAnimation("collided" , trex_colidiu)
   
-  solo = createSprite(width,height-100,width,20);
+  solo = createSprite(width+300,height-100,2000,20);
   solo.addImage("ground",imagemdosolo);
   solo.x = width/2;
   solo.velocityX = -4;
@@ -193,7 +193,7 @@ function gerarNuvens() {
     nuvem.velocityX = -(3+pontuacao/500);
     
      //atribuir tempo de duração à variável
-    nuvem.lifetime = 200;
+    nuvem.lifetime = 600;
     
     //ajustando a profundidade
     nuvem.depth = trex.depth;
